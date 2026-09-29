@@ -1,0 +1,77 @@
+/*
+ * Postdata — foundations.
+ * Primitive values first, then the semantic tokens the rest of the CSS uses.
+ */
+
+:root {
+  /* Primitives */
+  --yev-paper: #F2EFE8;
+  --yev-ink: #11100E;
+  --yev-signal: #FF4D1F;
+  --yev-muted-light: #514D47;
+  --yev-muted-dark: #A49E94;
+  --yev-edge-light: #8B857C;
+  --yev-edge-dark: #6B655C;
+
+  /* Type */
+  --font-sans: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --font-serif: "Newsreader Variable", "Newsreader", Georgia, serif;
+  --font-mono: "Atkinson Hyperlegible Mono Variable", "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+
+  --font-meta: 0.8125rem;
+  --font-ui: 0.9375rem;
+  --font-body: 1.0625rem;
+  --font-lead: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --font-entry: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --font-display: clamp(3.5rem, 1.5rem + 9vw, 7.25rem);
+
+  /* Space */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  /* Grid */
+  --page-max: 84rem;
+  --page-margin: clamp(1rem, 4vw, 3rem);
+  --gutter: clamp(1rem, 2vw, 1.5rem);
+  --measure: 62ch;
+
+  /* Geometry and motion */
+  --radius-control: 2px;
+  --motion-fast: 120ms;
+  --motion-default: 180ms;
+
+  /* Semantic: light is the default */
+  color-scheme: light dark;
+  --background: var(--yev-paper);
+  --foreground: var(--yev-ink);
+  --muted: var(--yev-muted-light);
+  --edge: var(--yev-edge-light);
+  --signal: var(--yev-signal);
+  --surface: #E7E2D7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: var(--yev-ink);
+    --foreground: var(--yev-paper);
+    --muted: var(--yev-muted-dark);
+    --edge: var(--yev-edge-dark);
+    --surface: #1C1A17;
+  }
+}
+
+:root[data-theme="dark"] {
+  --background: var(--yev-ink);
+  --foreground: var(--yev-paper);
+  --muted: var(--yev-muted-dark);
+  --edge: var(--yev-edge-dark);
+  --surface: #1C1A17;
+}

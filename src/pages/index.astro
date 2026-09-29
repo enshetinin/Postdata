@@ -1,0 +1,170 @@
+---
+import Base from '../layouts/Base.astro';
+import { getEscritos, groupByYear, readingMinutes, formatDayMonth, isoDate } from '../lib/escritos';
+
+const escritos = await getEscritos();
+const years = groupByYear(escritos);
+const count = escritos.length;
+const since = escritos.at(-1)?.data.date.getFullYear() ?? new Date().getFullYear();
+---
+
+<Base>
+  <header class="grid masthead">
+    <h1 class="title">Postdata</h1>
+    <p class="col-context meta masthead-meta">
+      Blog personal<br />
+      En español, desde {since}
+    </p>
+    <p class="col-content lead">
+      Una posdata es lo que se añade al final, cuando lo importante ya parece dicho.
+      Aquí escribo sobre diseño, software y las cosas que se quedan fuera.
+    </p>
+  </header>
+
+  <section class="grid index" aria-labelledby="escritos-titulo">
+    <div class="col-context index-heading">
+      <h2 id="escritos-titulo">Escritos</h2>
+      <p class="meta">{count === 1 ? '1 texto' : `${count} textos`}</p>
+    </div>
+
+    {count === 0 && (
+      <p class="col-content empty">Todavía no hay nada publicado.</p>
+    )}
+
+    {years.map(([year, entries]) => (
+      <section class="subgrid year" aria-labelledby={`y-${year}`}>
+        <h3 class="col-context year-label" id={`y-${year}`}>{year}</h3>
+        <ol class="col-content entries" role="list">
+          {entries.map((entry) => (
+            <li>
+              <article class="entry">
+                <h4 class="entry-title">
+                  <a href={`/escritos/${entry.id}/`}>{entry.data.title}</a>
+                </h4>
+                <p class="entry-description">{entry.data.description}</p>
+                <p class="meta">
+                  <time datetime={isoDate(entry.data.date)}>{formatDayMonth(entry.data.date)}</time>
+                  <span aria-hidden="true"> · </span>
+                  {readingMinutes(entry.body)} min de lectura
+                </p>
+              </article>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </section>
+</Base>
+
+<style>
+  /* Masthead: the one identity moment. Large Newsreader, then the grid takes over. */
+  .masthead {
+    row-gap: var(--space-6);
+    padding-block: clamp(var(--space-8), 12vw, var(--space-10)) var(--space-9);
+  }
+
+  .title {
+    font-family: var(--font-serif);
+    font-size: var(--font-display);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.025em;
+    /* Optical alignment of the large P with the grid edge. */
+    margin-inline-start: -0.04em;
+  }
+
+  .masthead-meta {
+    padding-block-start: 0.45em;
+  }
+
+  .lead {
+    font-family: var(--font-serif);
+    font-size: var(--font-lead);
+    line-height: 1.4;
+    max-inline-size: 34ch;
+    text-wrap: pretty;
+  }
+
+  /* Index: years live in the context column, entries on the reading axis. */
+  .index {
+    row-gap: var(--space-8);
+  }
+
+  .index-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--font-ui);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  /* Signal as notation: a single mark where the writing begins. */
+  .index-heading h2::before {
+    content: "";
+    inline-size: 0.625rem;
+    block-size: 0.625rem;
+    background: var(--signal);
+    flex: none;
+  }
+
+  .year {
+    row-gap: var(--space-5);
+  }
+
+  .year-label {
+    font-size: var(--font-ui);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted);
+  }
+
+  .entries {
+    display: grid;
+    row-gap: var(--space-7);
+    padding: 0;
+    list-style: none;
+  }
+
+  .entry {
+    display: grid;
+    row-gap: var(--space-2);
+    max-inline-size: var(--measure);
+  }
+
+  .entry-title {
+    font-family: var(--font-serif);
+    font-size: var(--font-entry);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .entry-title a {
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+  }
+
+  .entry-description {
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .empty {
+    color: var(--muted);
+  }
+
+  @media (min-width: 56rem) {
+    /* Heading and first year read as one block in the context column. */
+    .index-heading {
+      margin-block-end: calc(var(--space-5) - var(--space-8));
+    }
+
+    .year-label {
+      position: sticky;
+      inset-block-start: var(--space-6);
+      align-self: start;
+    }
+  }
+</style>

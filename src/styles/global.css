@@ -1,0 +1,148 @@
+@import "@fontsource-variable/atkinson-hyperlegible-next/wght.css";
+@import "@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css";
+@import "@fontsource-variable/atkinson-hyperlegible-mono/wght.css";
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--font-body);
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  font-variant-numeric: lining-nums;
+}
+
+h1, h2, h3, h4, p, ol, ul, figure, blockquote, pre {
+  margin: 0;
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--yev-ink);
+}
+
+/* Links look like links everywhere: underline is the affordance, not colour. */
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--edge);
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--motion-fast), text-decoration-thickness var(--motion-fast);
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--foreground);
+  outline-offset: 3px;
+  border-radius: var(--radius-control);
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  z-index: 10;
+  padding: var(--space-2) var(--space-4);
+  background: var(--foreground);
+  color: var(--background);
+  font-size: var(--font-ui);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/*
+ * Page grid. Twelve columns; the 4/8 split is the default relationship:
+ * context on the left, the reading axis on the right. Below 56rem it
+ * collapses to one column and the context sits above its content.
+ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  inline-size: 100%;
+  max-inline-size: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+.grid > *,
+.subgrid > * {
+  grid-column: 1 / -1;
+}
+
+.subgrid {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 56rem) {
+  .col-context {
+    grid-column: 1 / span 4;
+  }
+
+  .col-content {
+    grid-column: 5 / span 7;
+  }
+
+  .col-wide {
+    grid-column: 5 / -1;
+  }
+}
+
+.meta {
+  font-size: var(--font-meta);
+  line-height: 1.45;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
