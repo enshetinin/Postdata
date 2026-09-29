@@ -1,6 +1,11 @@
 ---
 import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+// The two faces every page paints first; preloaded so they are ready for the first frame.
+import sansUrl from '@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2?url';
+import serifUrl from '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url';
 
 interface Props {
   title?: string;
@@ -10,6 +15,8 @@ interface Props {
 const site = 'Postdata';
 const { title, description = 'Blog personal, en español.' } = Astro.props;
 const pageTitle = title ? `${title} — ${site}` : site;
+// /buscar/ has the search field in the page itself.
+const withDialog = Astro.url.pathname.replace(/\/?$/, '/') !== '/buscar/';
 ---
 
 <!doctype html>
@@ -17,21 +24,26 @@ const pageTitle = title ? `${title} — ${site}` : site;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={sansUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={serifUrl} as="font" type="font/woff2" crossorigin />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#F2EFE8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#11100E" media="(prefers-color-scheme: dark)" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="alternate" type="application/rss+xml" title="Postdata" href="/rss.xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
-    <slot name="header" />
+    <SiteHeader />
     <main id="contenido" tabindex="-1">
       <slot />
     </main>
     <SiteFooter />
+    {withDialog && <SearchDialog />}
   </body>
 </html>
 

@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+---
+
+<Base title="Sobre mí" description="Quién escribe Postdata.">
+  <PageIntro title="Sobre mí" lead="Quién escribe esto y por qué." />
+
+  <div class="grid">
+    <div class="col-content prose">
+      <!-- Placeholder: replace with your own text. -->
+      <p>
+        Me llamo Yev. Diseño y construyo interfaces, y me interesa sobre todo lo que ocurre entre las dos cosas:
+        cómo una decisión de diseño se convierte en código sin perder su intención.
+      </p>
+      <p>
+        Postdata es el sitio donde escribo lo que no cabe en otro lado. Si quieres seguirlo, hay un
+        <a href="/rss.xml" data-astro-prefetch="false">feed RSS</a>.
+      </p>
+    </div>
+  </div>
+</Base>

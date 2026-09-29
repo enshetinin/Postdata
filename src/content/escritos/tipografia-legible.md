@@ -2,6 +2,7 @@
 title: Elegir una tipografía por cómo se lee, no por cómo se ve
 description: Notas sobre Atkinson Hyperlegible y la diferencia entre carácter y legibilidad.
 date: 2026-08-14
+tema: tipografia
 ---
 
 Una tipografía puede ser bonita y difícil de leer. Atkinson Hyperlegible parte del problema contrario: que cada letra se distinga de las demás, incluso cuando la vista falla.

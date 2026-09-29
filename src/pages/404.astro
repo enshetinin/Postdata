@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+---
+
+<Base title="Página no encontrada">
+  <PageIntro title="Aquí no hay nada" lead="La dirección no existe o el texto se ha movido." />
+
+  <div class="grid">
+    <div class="col-content prose">
+      <p>
+        Prueba a <a href="/buscar/">buscarlo</a>, o recorre los <a href="/temas/">temas</a> y el
+        <a href="/archivo/">archivo</a>.
+      </p>
+    </div>
+  </div>
+</Base>

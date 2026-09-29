@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import PageIntro from '../components/PageIntro.astro';
+import YearGroups from '../components/YearGroups.astro';
+import { getEscritos, getTemas, countLabel } from '../lib/escritos';
+
+const [escritos, temas] = await Promise.all([getEscritos(), getTemas()]);
+---
+
+<Base title="Archivo" description="Todos los escritos de Postdata, por fecha.">
+  <PageIntro title="Archivo" lead="Todo lo publicado, del texto más reciente al más antiguo.">
+    {countLabel(escritos.length)}
+  </PageIntro>
+
+  <div class="grid">
+    {escritos.length === 0 && <p class="col-content">Todavía no hay nada publicado.</p>}
+    <YearGroups entries={escritos} level={2} temas={temas} />
+  </div>
+</Base>

@@ -137,6 +137,62 @@ code, kbd, samp, pre {
   font-variant-numeric: tabular-nums;
 }
 
+/* Long-form text: escritos and simple pages. */
+.prose {
+  max-inline-size: var(--measure);
+  font-family: var(--font-serif);
+  font-size: 1.1875rem;
+  line-height: 1.6;
+}
+
+.prose > * + * {
+  margin-block-start: 1.1em;
+}
+
+.prose h2 {
+  margin-block-start: 2.2em;
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.prose h2 + * {
+  margin-block-start: 0.6em;
+}
+
+.prose :is(ul, ol) {
+  padding-inline-start: 1.25em;
+}
+
+.prose blockquote {
+  padding-inline-start: 1em;
+  border-inline-start: 2px solid var(--foreground);
+  font-style: italic;
+}
+
+.prose :not(pre) > code {
+  font-size: 0.85em;
+  padding: 0.1em 0.3em;
+  background: var(--surface);
+}
+
+.prose pre {
+  padding: var(--space-4) var(--space-5);
+  overflow-x: auto;
+  background: var(--surface);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.lead {
+  font-family: var(--font-serif);
+  font-size: var(--font-lead);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

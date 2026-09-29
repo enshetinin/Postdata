@@ -1,22 +1,145 @@
 ---
-// Compact header for inner pages. The home page carries its own masthead.
-const isHome = Astro.url.pathname === '/';
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+
+const items = [
+  { href: '/temas/', label: 'Temas', section: true },
+  { href: '/archivo/', label: 'Archivo' },
+  { href: '/sobre-mi/', label: 'Sobre mí' },
+  { href: '/rss.xml', label: 'RSS', prefetch: false },
+];
+
+// Most specific true token: the page itself, or a section containing it.
+function current(item: (typeof items)[number]) {
+  if (path === item.href) return 'page';
+  if (item.section && path.startsWith(item.href)) return 'true';
+  return undefined;
+}
 ---
 
 <header class="grid site-header">
-  <p class="col-context wordmark">
-    <a href="/" aria-current={isHome ? 'page' : undefined}>Postdata</a>
+  <p class="wordmark">
+    <a href="/" aria-current={path === '/' ? 'page' : undefined}>Postdata</a>
   </p>
+
+  <nav class="site-nav" aria-label="Principal">
+    <ul role="list">
+      {items.map((item) => (
+        <li>
+          <a href={item.href} aria-current={current(item)} data-astro-prefetch={item.prefetch === false ? 'false' : undefined}>
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <!-- Search needs JavaScript; the script reveals this button. -->
+  <button type="button" class="search-trigger" data-search-open aria-keyshortcuts="Control+K Meta+K" hidden>
+    <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16">
+      <circle cx="6.75" cy="6.75" r="4.75" fill="none" stroke="currentColor" stroke-width="1.5" />
+      <path d="M10.25 10.25 14 14" stroke="currentColor" stroke-width="1.5" />
+    </svg>
+    Buscar
+    <kbd class="search-shortcut" data-search-shortcut>Ctrl K</kbd>
+  </button>
 </header>
 
 <style>
   .site-header {
-    padding-block: var(--space-6) var(--space-8);
+    align-items: center;
+    row-gap: var(--space-3);
+    padding-block: var(--space-5);
+    font-size: var(--font-ui);
   }
 
   .wordmark {
-    font-size: var(--font-ui);
+    grid-column: 1 / 8;
+    grid-row: 1;
     font-weight: 600;
     letter-spacing: 0.01em;
+  }
+
+  .search-trigger {
+    grid-column: 8 / -1;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  .site-nav {
+    grid-row: 2;
+  }
+
+  @media (min-width: 56rem) {
+    .wordmark {
+      grid-column: 1 / span 4;
+    }
+
+    .site-nav {
+      grid-column: 5 / span 6;
+      grid-row: 1;
+    }
+
+    .search-trigger {
+      grid-column: 11 / -1;
+    }
+  }
+
+  .site-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-5);
+    row-gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-nav a,
+  .wordmark a {
+    display: inline-block;
+    padding-block: var(--space-2);
+  }
+
+  /* Current location: a heavy underline in ink, never colour alone. */
+  a[aria-current]:not([aria-current="false"]) {
+    text-decoration-thickness: 3px;
+    text-decoration-color: currentColor;
+  }
+
+  .search-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: 2.75rem;
+    padding-inline: var(--space-4);
+    border: 1px solid var(--edge);
+    border-radius: var(--radius-control);
+    background: none;
+    color: inherit;
+    font: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: border-color var(--motion-fast);
+  }
+
+  .search-trigger[hidden] {
+    display: none;
+  }
+
+  .search-trigger:hover {
+    border-color: var(--foreground);
+  }
+
+  .search-shortcut {
+    display: none;
+    font-family: var(--font-sans);
+    font-size: var(--font-meta);
+    color: var(--muted);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .search-shortcut {
+      display: inline;
+      margin-inline-start: var(--space-2);
+    }
   }
 </style>

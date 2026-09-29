@@ -2,6 +2,7 @@
 title: Hola, Postdata
 description: Por qué abro un blog en 2026 y qué espero escribir aquí.
 date: 2026-09-29
+tema: personal
 ---
 
 Llevo tiempo acumulando notas que no encajan en ningún sitio: ideas a medio pensar sobre diseño, apuntes técnicos, cosas que aprendí tarde. Este blog es el lugar para ellas.

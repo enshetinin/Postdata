@@ -23,6 +23,8 @@
   --font-body: 1.0625rem;
   --font-lead: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
   --font-entry: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --font-entry-compact: clamp(1.25rem, 1.15rem + 0.4vw, 1.4375rem);
+  --font-title: clamp(2.25rem, 1.5rem + 3vw, 3.75rem);
   --font-display: clamp(3.5rem, 1.5rem + 9vw, 7.25rem);
 
   /* Space */
