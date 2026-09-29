@@ -32,12 +32,7 @@ export async function getGrupos(): Promise<Grupo[]> {
 }
 
 export function groupByYear(entries: Escrito[]): [number, Escrito[]][] {
-  const years = new Map<number, Escrito[]>();
-  for (const entry of entries) {
-    const year = entry.data.date.getUTCFullYear();
-    years.set(year, [...(years.get(year) ?? []), entry]);
-  }
-  return [...years.entries()];
+  return [...Map.groupBy(entries, (entry) => entry.data.date.getUTCFullYear())];
 }
 
 export const escritoUrl = (entry: Escrito) => `/escritos/${entry.id}/`;

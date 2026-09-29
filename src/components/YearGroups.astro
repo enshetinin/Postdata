@@ -4,21 +4,17 @@ import { groupByYear, type Escrito, type Tema } from '../lib/escritos';
 
 interface Props {
   entries: Escrito[];
-  /** Heading level of the year labels; entry titles sit one level below. */
-  level: 2 | 3;
   temas?: Map<string, Tema>;
 }
 
-const { entries, level, temas } = Astro.props;
-const Heading = `h${level}` as const;
+const { entries, temas } = Astro.props;
 const years = groupByYear(entries);
-const idPrefix = `y${level}`;
 ---
 
 {years.map(([year, yearEntries]) => (
-  <section class="subgrid year" aria-labelledby={`${idPrefix}-${year}`}>
-    <Heading class="col-context year-label" id={`${idPrefix}-${year}`}>{year}</Heading>
-    <EntryList class="col-content" entries={yearEntries} level={(level + 1) as 3 | 4} temas={temas} />
+  <section class="subgrid year" aria-labelledby={`y${year}`}>
+    <h2 class="col-context year-label" id={`y${year}`}>{year}</h2>
+    <EntryList class="col-content" entries={yearEntries} level={3} temas={temas} />
   </section>
 ))}
 

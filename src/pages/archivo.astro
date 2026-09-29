@@ -14,6 +14,6 @@ const [escritos, temas] = await Promise.all([getEscritos(), getTemas()]);
 
   <div class="grid">
     {escritos.length === 0 && <p class="col-content">Todavía no hay nada publicado.</p>}
-    <YearGroups entries={escritos} level={2} temas={temas} />
+    <YearGroups entries={escritos} temas={temas} />
   </div>
 </Base>
