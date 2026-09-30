@@ -17,15 +17,12 @@ Blog personal en Astro 7, sitio estático. Comandos y estructura: ver `README.md
 
 - Todo en español: `lang="es"`, fechas con `es-ES` (helpers en `src/lib/escritos.ts`), textos de interfaz en español.
 - Los escritos son Markdown en `src/content/escritos/`, con el esquema de `src/content.config.ts`. `draft: true` solo se ve en `npm run dev`.
-- Cada escrito tiene exactamente un `tema`, que debe existir en `src/content/temas.json` (el build falla si no). El orden de ese JSON es el orden de los temas en el sitio. Los temas sin textos no se muestran ni generan página.
 
-## Navegación y búsqueda
+## Navegación
 
-- Cabecera: Temas, Archivo, Sobre mí, RSS y el botón Buscar. Un tema cuenta como sección de Temas (`aria-current="true"`); la página exacta es `page`.
-- La búsqueda es Pagefind: `npm run build` ejecuta `pagefind --site dist` después de Astro. Solo se indexa lo marcado con `data-pagefind-body` (el artículo); `tema` y `fecha` van como `data-pagefind-meta`.
-- En dev, la integración `devLikeBuild` de `astro.config.mjs` sirve en `/pagefind/` el último índice de `dist/` y deja cachear las fuentes (sin eso, cada navegación en dev pinta primero la fuente de sistema: parpadeo). `npm run dev` hace un build antes para que exista; si cambias escritos con el servidor en marcha, el índice no se actualiza hasta el siguiente `npm run build`.
-- El diálogo sigue el contrato `dialog` de yev-design (`<dialog>` nativo con `showModal()`, Esc, foco de vuelta al botón, bloqueo de scroll por CSS). Se abre con el botón o con ⌘K / Ctrl K; nada de atajos de una sola tecla (WCAG 2.1.4). `/buscar/?q=` es la versión enlazable.
-- `vite.build.assetsInlineLimit: 0` es necesario: si Astro incrusta el script, el `import()` de Pagefind se rompe (`__VITE_PRELOAD__`).
+- Páginas: portada (todos los escritos por año), un escrito por página, Sobre mí, RSS y 404. Temas, archivo y búsqueda (Pagefind) se quitaron a propósito para la primera versión; están en el historial de git si vuelven.
+- Cabecera: el nombre (enlace a la portada), Sobre mí y RSS. La página exacta lleva `aria-current="page"`.
+- En dev, la integración `cacheFontsInDev` de `astro.config.mjs` deja cachear las fuentes; sin eso, cada navegación pinta primero la fuente de sistema (parpadeo).
 
 ## Técnico
 
@@ -42,5 +39,5 @@ Blog personal en Astro 7, sitio estático. Comandos y estructura: ver `README.md
 
 ## Pendiente
 
-- `site` en `astro.config.mjs` es un marcador (`https://postdata.example`): hay que poner el dominio real (lo usan RSS y las URLs canónicas).
-- Los escritos, los temas, la frase de la portada y el texto de "Sobre mí" son de muestra; el autor los sustituirá.
+- Aún no hay escritos (`src/content/escritos/` solo tiene un `.gitkeep`); el autor los irá creando. El aviso `No files found` del glob loader en el build es esperable hasta entonces.
+- La frase de la portada y el texto de "Sobre mí" son de muestra; el autor los sustituirá.

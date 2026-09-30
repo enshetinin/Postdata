@@ -1,9 +1,9 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
-import { getEscritos, getTemas, escritoUrl } from '../lib/escritos';
+import { getEscritos, escritoUrl } from '../lib/escritos';
 
 export async function GET(context: APIContext) {
-  const [escritos, temas] = await Promise.all([getEscritos(), getTemas()]);
+  const escritos = await getEscritos();
   return rss({
     title: 'Postdata',
     description: 'Blog personal, en español.',
@@ -14,7 +14,6 @@ export async function GET(context: APIContext) {
       description: entry.data.description,
       pubDate: entry.data.date,
       link: escritoUrl(entry),
-      categories: [temas.get(entry.data.tema.id)?.data.nombre ?? entry.data.tema.id],
     })),
   });
 }

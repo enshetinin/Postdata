@@ -1,20 +1,19 @@
 ---
 import EntryList from './EntryList.astro';
-import { groupByYear, type Escrito, type Tema } from '../lib/escritos';
+import { groupByYear, type Escrito } from '../lib/escritos';
 
 interface Props {
   entries: Escrito[];
-  temas?: Map<string, Tema>;
 }
 
-const { entries, temas } = Astro.props;
+const { entries } = Astro.props;
 const years = groupByYear(entries);
 ---
 
 {years.map(([year, yearEntries]) => (
   <section class="subgrid year" aria-labelledby={`y${year}`}>
     <h2 class="col-context year-label" id={`y${year}`}>{year}</h2>
-    <EntryList class="col-content" entries={yearEntries} level={3} temas={temas} />
+    <EntryList class="col-content" entries={yearEntries} level={3} />
   </section>
 ))}
 

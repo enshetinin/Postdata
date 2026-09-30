@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import SearchDialog from '../components/SearchDialog.astro';
 // The two faces every page paints first; preloaded so they are ready for the first frame.
 import sansUrl from '@fontsource-variable/atkinson-hyperlegible-next/files/atkinson-hyperlegible-next-latin-wght-normal.woff2?url';
 import serifUrl from '@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2?url';
@@ -16,8 +15,6 @@ const site = 'Postdata';
 const { title, description = 'Blog personal, en español.' } = Astro.props;
 const pageTitle = title ? `${title} — ${site}` : site;
 const path = Astro.url.pathname.replace(/\/?$/, '/');
-// /buscar/ has the search field in the page itself.
-const withDialog = path !== '/buscar/';
 ---
 
 <!doctype html>
@@ -44,7 +41,6 @@ const withDialog = path !== '/buscar/';
       <slot />
     </main>
     <SiteFooter />
-    {withDialog && <SearchDialog />}
   </body>
 </html>
 

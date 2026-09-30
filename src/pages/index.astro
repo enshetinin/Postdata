@@ -1,13 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import EntryList from '../components/EntryList.astro';
-import { getEscritos, getGrupos, temaUrl, countLabel } from '../lib/escritos';
+import YearGroups from '../components/YearGroups.astro';
+import { getEscritos, countLabel } from '../lib/escritos';
 
-const PER_TEMA = 3;
-
-const [escritos, grupos] = await Promise.all([getEscritos(), getGrupos()]);
+const escritos = await getEscritos();
 const since = escritos.at(-1)?.data.date.getUTCFullYear() ?? new Date().getFullYear();
-const temasLabel = grupos.length === 1 ? '1 tema' : `${grupos.length} temas`;
 ---
 
 <Base>
@@ -23,38 +20,15 @@ const temasLabel = grupos.length === 1 ? '1 tema' : `${grupos.length} temas`;
     </p>
   </div>
 
-  <section class="grid temas" aria-labelledby="temas-titulo">
-    <div class="col-context temas-heading">
-      <h2 id="temas-titulo">Por temas</h2>
-      <p class="meta">{countLabel(escritos.length)} en {temasLabel}</p>
+  <section class="grid escritos" aria-labelledby="escritos-titulo">
+    <div class="col-context escritos-heading">
+      <h2 id="escritos-titulo">Escritos</h2>
+      {escritos.length > 0 && <p class="meta">{countLabel(escritos.length)}</p>}
     </div>
 
-    {grupos.length === 0 && <p class="col-content empty">Todavía no hay nada publicado.</p>}
+    {escritos.length === 0 && <p class="col-content empty">Todavía no hay nada publicado.</p>}
 
-    {grupos.map(({ tema, escritos: entries }) => (
-      <section class="subgrid tema" aria-labelledby={`tema-${tema.id}`}>
-        <div class="col-context tema-context">
-          <h3 class="tema-name" id={`tema-${tema.id}`}>
-            <a href={temaUrl(tema.id)}>{tema.data.nombre}</a>
-          </h3>
-          <p class="meta">{tema.data.descripcion}</p>
-        </div>
-        <div class="col-content tema-entries">
-          <EntryList entries={entries.slice(0, PER_TEMA)} level={4} variant="compact" withYear />
-          {entries.length > PER_TEMA && (
-            <p class="more">
-              <a href={temaUrl(tema.id)}>Los {entries.length} textos de {tema.data.nombre}</a>
-            </p>
-          )}
-        </div>
-      </section>
-    ))}
-
-    {escritos.length > 0 && (
-      <p class="col-content archive-link">
-        Todo, por fecha, en el <a href="/archivo/">archivo</a>.
-      </p>
-    )}
+    <YearGroups entries={escritos} />
   </section>
 </Base>
 
@@ -83,15 +57,13 @@ const temasLabel = grupos.length === 1 ? '1 tema' : `${grupos.length} temas`;
     max-inline-size: 34ch;
   }
 
-  .temas {
-    row-gap: var(--space-8);
+  .escritos-heading {
+    display: grid;
+    row-gap: var(--space-1);
+    margin-block-end: var(--space-7);
   }
 
-  .temas-heading {
-    margin-block-end: calc(var(--space-5) - var(--space-8));
-  }
-
-  .temas-heading h2 {
+  .escritos-heading h2 {
     display: flex;
     align-items: center;
     gap: var(--space-3);
@@ -101,7 +73,7 @@ const temasLabel = grupos.length === 1 ? '1 tema' : `${grupos.length} temas`;
   }
 
   /* Signal as notation: a single mark where the writing begins. */
-  .temas-heading h2::before {
+  .escritos-heading h2::before {
     content: "";
     inline-size: 0.625rem;
     block-size: 0.625rem;
@@ -109,42 +81,7 @@ const temasLabel = grupos.length === 1 ? '1 tema' : `${grupos.length} temas`;
     flex: none;
   }
 
-  .tema {
-    row-gap: var(--space-4);
-  }
-
-  .tema-context {
-    display: grid;
-    row-gap: var(--space-1);
-    align-content: start;
-    max-inline-size: 28ch;
-  }
-
-  .tema-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-    line-height: 1.3;
-  }
-
-  .more {
-    margin-block-start: var(--space-4);
-    font-size: var(--font-ui);
-  }
-
-  .archive-link,
   .empty {
     color: var(--muted);
-  }
-
-  .archive-link {
-    font-family: var(--font-serif);
-    font-size: var(--font-lead);
-  }
-
-  @media (min-width: 56rem) {
-    /* Tema name rests on the first title's cap height. */
-    .tema-context {
-      padding-block-start: 0.2rem;
-    }
   }
 </style>

@@ -2,33 +2,30 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import EntryList from '../../components/EntryList.astro';
-import { getEscritos, getTemas, readingMinutes, formatDate, isoDate, temaUrl, type Escrito, type Tema } from '../../lib/escritos';
+import { getEscritos, readingMinutes, formatDate, isoDate, type Escrito } from '../../lib/escritos';
 
 export async function getStaticPaths() {
-  const [escritos, temas] = await Promise.all([getEscritos(), getTemas()]);
+  const escritos = await getEscritos();
   return escritos.map((entry) => {
-    const tema = temas.get(entry.data.tema.id)!;
-    const related = escritos.filter((e) => e.data.tema.id === tema.id && e.id !== entry.id).slice(0, 3);
-    return { params: { slug: entry.id }, props: { entry, tema, related } };
+    const related = escritos.filter((e) => e.id !== entry.id).slice(0, 3);
+    return { params: { slug: entry.id }, props: { entry, related } };
   });
 }
 
-const { entry, tema, related } = Astro.props as { entry: Escrito; tema: Tema; related: Escrito[] };
+const { entry, related } = Astro.props as { entry: Escrito; related: Escrito[] };
 const { Content } = await render(entry);
 ---
 
 <Base title={entry.data.title} description={entry.data.description}>
-  <article class="grid article" data-pagefind-body>
+  <article class="grid article">
     <header class="col-content article-header">
       <h1>{entry.data.title}</h1>
       <p class="lead">{entry.data.description}</p>
     </header>
 
-    <!-- Not indexed as text; its values still become search metadata. -->
-    <aside class="col-context meta article-meta" aria-label="Datos del texto" data-pagefind-ignore>
+    <aside class="col-context meta article-meta" aria-label="Datos del texto">
       <ul role="list">
-        <li><a href={temaUrl(tema.id)} data-pagefind-meta="tema">{tema.data.nombre}</a></li>
-        <li><time datetime={isoDate(entry.data.date)} data-pagefind-meta="fecha">{formatDate(entry.data.date)}</time></li>
+        <li><time datetime={isoDate(entry.data.date)}>{formatDate(entry.data.date)}</time></li>
         <li>{readingMinutes(entry.body)} min de lectura</li>
       </ul>
     </aside>
@@ -41,8 +38,8 @@ const { Content } = await render(entry);
   {related.length > 0 && (
     <section class="grid related" aria-labelledby="mas-titulo">
       <div class="col-context related-heading">
-        <h2 id="mas-titulo">Más en {tema.data.nombre}</h2>
-        <p class="meta"><a href={temaUrl(tema.id)}>Todo el tema</a></p>
+        <h2 id="mas-titulo">Más textos</h2>
+        <p class="meta"><a href="/">Todos, en la portada</a></p>
       </div>
       <EntryList class="col-content" entries={related} level={3} variant="compact" withYear />
     </section>

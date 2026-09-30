@@ -1,13 +1,11 @@
 ---
 import {
   escritoUrl,
-  temaUrl,
   readingMinutes,
   formatDayMonth,
   formatDate,
   isoDate,
   type Escrito,
-  type Tema,
 } from '../lib/escritos';
 
 interface Props {
@@ -16,47 +14,36 @@ interface Props {
   level: 3 | 4;
   /** compact: title and date. full: adds description and reading time. */
   variant?: 'full' | 'compact';
-  /** Pass to show each entry's tema as a link. */
-  temas?: Map<string, Tema>;
   /** Show the year in the date (when the list is not grouped by year). */
   withYear?: boolean;
   class?: string;
 }
 
-const { entries, level, variant = 'full', temas, withYear = false, class: className } = Astro.props;
+const { entries, level, variant = 'full', withYear = false, class: className } = Astro.props;
 const Heading = `h${level}` as const;
 const format = withYear ? formatDate : formatDayMonth;
 ---
 
 <ol class:list={['entries', variant, className]} role="list">
-  {entries.map((entry) => {
-    const tema = temas?.get(entry.data.tema.id);
-    return (
-      <li>
-        <article class="entry">
-          <Heading class="entry-title">
-            <a href={escritoUrl(entry)}>{entry.data.title}</a>
-          </Heading>
-          {variant === 'full' && <p class="entry-description">{entry.data.description}</p>}
-          <p class="meta">
-            <time datetime={isoDate(entry.data.date)}>{format(entry.data.date)}</time>
-            {tema && (
-              <>
-                <span aria-hidden="true"> · </span>
-                <a href={temaUrl(tema.id)}>{tema.data.nombre}</a>
-              </>
-            )}
-            {variant === 'full' && (
-              <>
-                <span aria-hidden="true"> · </span>
-                {readingMinutes(entry.body)} min de lectura
-              </>
-            )}
-          </p>
-        </article>
-      </li>
-    );
-  })}
+  {entries.map((entry) => (
+    <li>
+      <article class="entry">
+        <Heading class="entry-title">
+          <a href={escritoUrl(entry)}>{entry.data.title}</a>
+        </Heading>
+        {variant === 'full' && <p class="entry-description">{entry.data.description}</p>}
+        <p class="meta">
+          <time datetime={isoDate(entry.data.date)}>{format(entry.data.date)}</time>
+          {variant === 'full' && (
+            <>
+              <span aria-hidden="true"> · </span>
+              {readingMinutes(entry.body)} min de lectura
+            </>
+          )}
+        </p>
+      </article>
+    </li>
+  ))}
 </ol>
 
 <style>
