@@ -15,8 +15,9 @@ interface Props {
 const site = 'Postdata';
 const { title, description = 'Blog personal, en español.' } = Astro.props;
 const pageTitle = title ? `${title} — ${site}` : site;
+const path = Astro.url.pathname.replace(/\/?$/, '/');
 // /buscar/ has the search field in the page itself.
-const withDialog = Astro.url.pathname.replace(/\/?$/, '/') !== '/buscar/';
+const withDialog = path !== '/buscar/';
 ---
 
 <!doctype html>
@@ -31,7 +32,7 @@ const withDialog = Astro.url.pathname.replace(/\/?$/, '/') !== '/buscar/';
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#F2EFE8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#11100E" media="(prefers-color-scheme: dark)" />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
     <link rel="alternate" type="application/rss+xml" title="Postdata" href="/rss.xml" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />

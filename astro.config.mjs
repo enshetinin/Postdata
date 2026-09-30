@@ -2,6 +2,7 @@
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { extname, join, resolve, sep } from 'node:path';
 import { defineConfig } from 'astro/config';
+import { satteri } from '@astrojs/markdown-satteri';
 
 const PAGEFIND_DIR = resolve('dist/pagefind');
 const PAGEFIND_TYPES = { '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.wasm': 'application/wasm' };
@@ -41,7 +42,9 @@ function devLikeBuild() {
 export default defineConfig({
   // Placeholder: replace with the real domain. RSS and canonical URLs depend on it.
   site: 'https://postdata.example',
-  trailingSlash: 'always',
+  // Built URLs end in a slash (directory output). 'always' would also make `astro dev`
+  // answer URLs without one with Astro's generic 404 instead of src/pages/404.astro.
+  trailingSlash: 'ignore',
   integrations: [devLikeBuild()],
   // Load a page when its link is hovered or focused, so the click finds it ready.
   prefetch: {
@@ -59,5 +62,17 @@ export default defineConfig({
   markdown: {
     // Code blocks are styled by global.css; a Shiki theme would bring its own palette.
     syntaxHighlight: false,
+    processor: satteri({
+      features: {
+        gfm: {
+          footnotes: {
+            label: 'Notas',
+            // U+FE0E keeps the arrow as text; without it iOS draws an emoji.
+            backContent: '↩\uFE0E',
+            backLabel: 'Volver a la referencia {reference}',
+          },
+        },
+      },
+    }),
   },
 });

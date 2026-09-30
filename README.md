@@ -29,3 +29,9 @@ src/
 ```
 
 Para publicar un texto, añade un `.md` en `src/content/escritos/` con un `tema` de `temas.json`. Con `draft: true` solo aparece en desarrollo.
+
+Para una nota al pie, usa la sintaxis GFM: `texto[^1]` y, al final, `[^1]: La nota.`
+
+## Despliegue
+
+En [Render](https://render.com) como sitio estático, con la configuración de `render.yaml`. Cada push a `main` despliega cuando el CI de GitHub Actions pasa.

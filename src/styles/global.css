@@ -186,6 +186,147 @@ code, kbd, samp, pre {
   tab-size: 2;
 }
 
+.prose p {
+  text-wrap: pretty;
+}
+
+/* A narrow column leaves ragged gaps in Spanish; let the browser hyphenate there. */
+@media (width < 56rem) {
+  .prose p {
+    hyphens: auto;
+  }
+}
+
+.prose :is(h2, h3) {
+  text-wrap: balance;
+  scroll-margin-block-start: var(--space-6);
+}
+
+.prose h3 {
+  margin-block-start: 1.8em;
+  font-family: var(--font-sans);
+  font-size: var(--font-body);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.prose h3 + * {
+  margin-block-start: 0.5em;
+}
+
+.prose li + li {
+  margin-block-start: 0.35em;
+}
+
+.prose li::marker {
+  color: var(--muted);
+}
+
+/* A thematic break is a pause, not a line. */
+.prose hr {
+  block-size: 0;
+  margin-block: 2.2em;
+  border: 0;
+}
+
+.prose :is(img, video) {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.prose figcaption {
+  margin-block-start: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--font-meta);
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.prose :is(th, td) {
+  padding: var(--space-1) var(--space-5) var(--space-1) 0;
+  text-align: start;
+  vertical-align: top;
+}
+
+.prose th {
+  font-weight: 600;
+}
+
+/*
+ * Footnotes (GFM). The reference is a small raised number that does not
+ * disturb the line spacing; the notes close the text in the sans, set apart
+ * by space alone.
+ */
+.prose sup {
+  font-size: 0.7em;
+  line-height: 0;
+}
+
+.prose [data-footnote-ref] {
+  padding-inline: 0.15em;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  scroll-margin-block: var(--space-7);
+}
+
+.prose .footnotes {
+  margin-block-start: var(--space-8);
+  font-family: var(--font-sans);
+  font-size: var(--font-ui);
+  line-height: 1.5;
+}
+
+/* The processor marks the label sr-only; here it stays visible as a quiet heading. */
+.prose .footnotes > h2 {
+  position: static;
+  inline-size: auto;
+  block-size: auto;
+  margin: 0 0 var(--space-3);
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+  font-size: var(--font-meta);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.prose .footnotes ol {
+  padding-inline-start: 1.5em;
+}
+
+.prose .footnotes li {
+  scroll-margin-block: var(--space-7);
+}
+
+.prose .footnotes li + li {
+  margin-block-start: var(--space-3);
+}
+
+.prose .footnotes li::marker {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Arriving from a reference: the number of the note in hand turns to ink. */
+.prose .footnotes li:target::marker {
+  color: var(--foreground);
+  font-weight: 700;
+}
+
+.prose [data-footnote-backref] {
+  margin-inline-start: 0.25em;
+  font-family: var(--font-sans);
+}
+
 .lead {
   font-family: var(--font-serif);
   font-size: var(--font-lead);

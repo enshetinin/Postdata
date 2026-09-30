@@ -29,13 +29,18 @@ Blog personal en Astro 7, sitio estático. Comandos y estructura: ver `README.md
 
 ## Técnico
 
+- Markdown con Sätteri (`@astrojs/markdown-satteri`, el procesador por defecto de Astro 7). Las notas al pie GFM (`[^id]`) salen en español por su config en `astro.config.mjs`; sus estilos, junto con el resto de la prosa, están en `.prose` de `global.css`. `markdown.remarkRehype` ya no aplica.
 - Resaltado de sintaxis desactivado a propósito (`astro.config.mjs`): los bloques de código usan los colores del sitio. No activar Shiki sin un tema hecho con los tokens.
 - Fuentes vía Fontsource (`@fontsource-variable/*`), importadas en `global.css`. No cargar Google Fonts. `Base.astro` precarga las dos caras principales (Atkinson Next y Newsreader, latin normal); si cambian, cambiar también esos `?url`.
 - Sin JavaScript de cliente salvo que sea imprescindible; preferir CSS y HTML nativo.
 - Antes de dar un cambio por terminado: `npm run build` y `npm run check` sin errores.
 
+## Despliegue
+
+- Render, sitio estático, definido en `render.yaml` (Blueprint): despliega `main` con `npm ci && npm run build` y publica `dist/`. Node sale de `.node-version`.
+- `autoDeployTrigger: checksPass`: Render solo despliega si pasa el CI (`.github/workflows/ci.yml`, que ejecuta `check` y `build` en `main`, `develop` y PRs).
+
 ## Pendiente
 
 - `site` en `astro.config.mjs` es un marcador (`https://postdata.example`): hay que poner el dominio real (lo usan RSS y las URLs canónicas).
-- La página de artículo es funcional pero aún no ha tenido su pasada de diseño.
 - Los escritos, los temas, la frase de la portada y el texto de "Sobre mí" son de muestra; el autor los sustituirá.

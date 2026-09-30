@@ -26,9 +26,11 @@ const { Content } = await render(entry);
 
     <!-- Not indexed as text; its values still become search metadata. -->
     <aside class="col-context meta article-meta" aria-label="Datos del texto" data-pagefind-ignore>
-      <a href={temaUrl(tema.id)} data-pagefind-meta="tema">{tema.data.nombre}</a><br />
-      <time datetime={isoDate(entry.data.date)} data-pagefind-meta="fecha">{formatDate(entry.data.date)}</time><br />
-      {readingMinutes(entry.body)} min de lectura
+      <ul role="list">
+        <li><a href={temaUrl(tema.id)} data-pagefind-meta="tema">{tema.data.nombre}</a></li>
+        <li><time datetime={isoDate(entry.data.date)} data-pagefind-meta="fecha">{formatDate(entry.data.date)}</time></li>
+        <li>{readingMinutes(entry.body)} min de lectura</li>
+      </ul>
     </aside>
 
     <div class="col-content prose">
@@ -49,7 +51,6 @@ const { Content } = await render(entry);
 
 <style>
   .article {
-    row-gap: var(--space-7);
     padding-block-start: var(--space-7);
   }
 
@@ -72,6 +73,21 @@ const { Content } = await render(entry);
     max-inline-size: var(--measure);
   }
 
+  /* In one column the data belongs to the title: close to it, far from the text. */
+  .article-meta {
+    margin-block: var(--space-5) var(--space-7);
+  }
+
+  .article-meta ul {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-5);
+    row-gap: var(--space-1);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
   .related {
     row-gap: var(--space-5);
     margin-block-start: var(--space-9);
@@ -90,6 +106,10 @@ const { Content } = await render(entry);
   }
 
   @media (min-width: 56rem) {
+    .article {
+      row-gap: var(--space-7);
+    }
+
     .article-header {
       grid-row: 1;
     }
@@ -99,7 +119,12 @@ const { Content } = await render(entry);
       align-self: start;
       position: sticky;
       inset-block-start: var(--space-6);
+      margin-block: 0;
       padding-block-start: 0.35rem;
+    }
+
+    .article-meta ul {
+      flex-direction: column;
     }
 
     .prose {
